@@ -1,0 +1,98 @@
+{
+	"person": [
+		{
+			"person_id":1,
+			"fname":"Spongebob",
+		 	"lname": "Squarepants",
+		 	"person_job" : "author",
+	 	 	"email":"sb@mac.com",
+	 	 	"mailing_address":"Bikini Bottom",
+	 	 	"affiliation":"marine life"
+		},
+		{
+			"person_id":2,
+			"fname":"Scooby",
+		 	"lname": "Doo",
+		 	"person_job" : "reviewer",
+		 	"email": "sd@mac.com",
+		 	"affiliation":"mystery"
+		},
+		{
+			"person_id":3,
+			"fname":"Shrek",
+		 	"lname": "TheOgre",
+		 	"person_job" : "editor",
+		}
+	],
+	"manuscript": [
+		{
+			"manuscript_id":1,
+			"title":"Spongebob",
+			"date_submitted": "Squarepants",
+			"man_status" : "under review",
+	 		"RICode":1,
+	 	 	"person_id":3
+		},
+		{
+			"manuscript_id":,
+			"title":"Spongebob",
+			"date_submitted": "Squarepants",
+			"man_status" : "accepted",
+	 		"RICode":1,
+	 	 	"person_id":3
+		},
+	],
+	"man_to_author": [
+		{
+			"person_id": 1,
+			"manuscript_id":1,
+			"author_order_num":1
+		}
+	],
+	"accepted_man": [
+		{
+			"manuscript_id":,
+			"date_of_acceptance":,
+			"num_of_pages":
+		}
+	],
+	"feedback": [
+		{
+			"manuscript_id":,
+			"person_id":,
+			"date_assigned":,
+			"appropriateness":,
+			"clarity":,
+			"methodology":,
+			"contribution_to_field":,
+			"recommendation":,
+			"date_completed":
+		}
+	],
+	"issue": [
+		{	
+			"issue_id":,
+			"print_date":,
+			"pub_period_num":,
+			"pub_year":,
+			"person_id":
+		}
+	],
+	"issue_to_man": [
+		{
+			"manuscript_id":,
+			"issue_id":,
+			"page_num":,
+			"position_in_issue":
+		}
+	],
+
+
+
+
+
+
+
+
+
+}
