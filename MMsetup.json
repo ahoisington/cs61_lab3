@@ -17,6 +17,7 @@
 		 	"email": "sd@mac.com",
 		 	"affiliation":"Mystery Inc.",
 		 	"RICode1": 1,
+		 	"RICode2":2
 		},
 		{ //editor
 			"person_id":3,
@@ -116,6 +117,7 @@
 		},
 	],
 	"man_to_author": [
+		//primary authors
 		{
 			"person_id": 1,
 			"manuscript_id":1,
@@ -132,39 +134,39 @@
 			"author_order_num":1
 		},
 		{
-			"person_id": 2,
+			"person_id": 6,
 			"manuscript_id":4,
 			"author_order_num":1
 		},
 		{
-			"person_id": 2,
+			"person_id": 6,
 			"manuscript_id":5,
 			"author_order_num":1
 		},
 		{
-			"person_id": 2,
+			"person_id": 6,
 			"manuscript_id":6,
 			"author_order_num":1
 		},
 		{
-			"person_id": 2,
+			"person_id": 6,
 			"manuscript_id":7,
 			"author_order_num":1
 		},
 
 		//secondary authors
 		{
-			"person_id": 2,
+			"person_id": 6,
 			"manuscript_id":1,
 			"author_order_num":2
 		},
 		{
-			"person_id": 2,
+			"person_id": 6,
 			"manuscript_id":2,
 			"author_order_num":2
 		},
 		{
-			"person_id": 2,
+			"person_id": 6,
 			"manuscript_id":3,
 			"author_order_num":2
 		},
@@ -194,62 +196,207 @@
 			"manuscript_id": 4,
 			"date_of_acceptance": "2016-07-14 08:14:49",
 			"num_of_pages": 50
+		},
+		{
+			"manuscript_id": 5,
+			"date_of_acceptance": "2016-08-14 08:14:49",
+			"num_of_pages": 40
+		},
+		{
+			"manuscript_id": 6,
+			"date_of_acceptance": "2016-08-14 08:14:49",
+			"num_of_pages": 30
+		},
+		{
+			"manuscript_id": 7,
+			"date_of_acceptance": "2016-08-14 08:14:49",
+			"num_of_pages": 20
 		}
 	],
 	"feedback": [
 		{
-			"manuscript_id": 4,
-			"person_id": , // must match w RICode of accepted man
-			"date_assigned":,
-			"appropriateness":,
-			"clarity":,
-			"methodology":,
-			"contribution_to_field":,
-			"recommendation":,
-			"date_completed":
+			"manuscript_id": 2,
+			"person_id": 2, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": null,
+			"clarity": null,
+			"methodology":null,
+			"contribution_to_field":null,
+			"recommendation":null,
+			"date_completed":null
+		},
+		{
+			"manuscript_id": 2,
+			"person_id": 4, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": null,
+			"clarity": null,
+			"methodology":null,
+			"contribution_to_field":null,
+			"recommendation":null,
+			"date_completed":null
+		},
+		{
+			"manuscript_id": 2,
+			"person_id": 5, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": null,
+			"clarity": null,
+			"methodology":null,
+			"contribution_to_field":null,
+			"recommendation":null,
+			"date_completed":null
 		},
 		{
 			"manuscript_id": 4,
-			"person_id": , // must match w RICode of accepted man
-			"date_assigned":,
-			"appropriateness":,
-			"clarity":,
-			"methodology":,
-			"contribution_to_field":,
-			"recommendation":,
-			"date_completed":
+			"person_id": 2, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
+		},
+		{
+			"manuscript_id": 4,
+			"person_id": 4, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
+		},
+		{
+			"manuscript_id": 4,
+			"person_id": 5, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
+		},
+		{
+			"manuscript_id": 5,
+			"person_id": 2, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
+		},
+		{
+			"manuscript_id": 5,
+			"person_id": 4, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
+		},
+		{
+			"manuscript_id": 5,
+			"person_id": 5, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
+		},
+		{
+			"manuscript_id": 6,
+			"person_id": 2, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
+		},
+		{
+			"manuscript_id": 6,
+			"person_id": 4, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
+		},
+		{
+			"manuscript_id": 6,
+			"person_id": 5, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
+		},
+		{
+			"manuscript_id": 7,
+			"person_id": 2, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
+		},
+		{
+			"manuscript_id": 7,
+			"person_id": 4, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
+		},
+		{
+			"manuscript_id": 7,
+			"person_id": 5, // must match w RICode of accepted man
+			"date_assigned": "2016-07-14 08:14:49",
+			"appropriateness": 7,
+			"clarity": 7,
+			"methodology":7,
+			"contribution_to_field":7,
+			"recommendation":"accept",
+			"date_completed":"2016-09-14 08:14:49"
 		}
 	],
 	"issue": [
 		{	
-			"issue_id":,
-			"print_date":,
-			"pub_period_num":,
-			"pub_year":,
-			"person_id":
+			"issue_id": 1,
+			"print_date": "2016-012-14",
+			"pub_period_num": 2,
+			"pub_year": 2018,
+			"person_id": 3
 		}
 	],
 	"issue_to_man": [
 		{
-			"manuscript_id":,
-			"issue_id":,
-			"page_num":,
-			"position_in_issue":
+			"manuscript_id":7,
+			"issue_id": 1,
+			"page_num":1,
+			"position_in_issue":1
 		}
-	],
-
-
-
-
-
-
-
-
-
-
-
-
-
+	]
 
 
 
