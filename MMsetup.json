@@ -1,6 +1,6 @@
 {
 	"person": [
-		{//author
+		{
 			"person_id":1,
 			"fname":"Spongebob",
 		 	"lname": "Squarepants",
@@ -9,7 +9,7 @@
 	 	 	"mailing_address":"Bikini Bottom",
 	 	 	"affiliation":"The Ocean"
 		},
-		{ //reviewer 1
+		{
 			"person_id":2,
 			"fname":"Scooby",
 		 	"lname": "Doo",
@@ -19,13 +19,13 @@
 		 	"RICode1": 1,
 		 	"RICode2":2
 		},
-		{ //editor
+		{
 			"person_id":3,
 			"fname":"Shrek",
 		 	"lname": "TheOgre",
-		 	"person_job" : "editor",
+		 	"person_job" : "editor"
 		},
-		{//reviewer
+		{
 			"person_id":4,
 			"fname":"Sco",
 		 	"lname": "Doo",
@@ -34,9 +34,9 @@
 		 	"affiliation":"mystery",
 		 	"RICode1": 1,
 		 	"RICode2": 2,
-		 	"RICode3": 3,
+		 	"RICode3": 3
 		},
-		{//reviewer
+		{
 			"person_id":5,
 			"fname":"blah",
 		 	"lname": "blee",
@@ -44,9 +44,9 @@
 		 	"email": "sd@mac.com",
 		 	"affiliation":"Darty",
 		 	"RICode1": 1,
-		 	"RICode2": 2,
+		 	"RICode2": 2
 		},
-		{//author2
+		{
 			"person_id":6,
 			"fname":"gooo",
 		 	"lname": "gobble",
@@ -54,7 +54,7 @@
 	 	 	"email":"turkey@mac.com",
 	 	 	"mailing_address":"turkey place",
 	 	 	"affiliation":"Darty",
-	 	 	"RICode1": 1,
+	 	 	"RICode1": 1
 		},
 
 	],
@@ -117,7 +117,7 @@
 		},
 	],
 	"man_to_author": [
-		//primary authors
+		
 		{
 			"person_id": 1,
 			"manuscript_id":1,
@@ -154,7 +154,7 @@
 			"author_order_num":1
 		},
 
-		//secondary authors
+		
 		{
 			"person_id": 6,
 			"manuscript_id":1,
@@ -216,7 +216,7 @@
 	"feedback": [
 		{
 			"manuscript_id": 2,
-			"person_id": 2, // must match w RICode of accepted man
+			"person_id": 2, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": null,
 			"clarity": null,
@@ -227,7 +227,7 @@
 		},
 		{
 			"manuscript_id": 2,
-			"person_id": 4, // must match w RICode of accepted man
+			"person_id": 4, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": null,
 			"clarity": null,
@@ -238,7 +238,7 @@
 		},
 		{
 			"manuscript_id": 2,
-			"person_id": 5, // must match w RICode of accepted man
+			"person_id": 5,
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": null,
 			"clarity": null,
@@ -249,7 +249,7 @@
 		},
 		{
 			"manuscript_id": 4,
-			"person_id": 2, // must match w RICode of accepted man
+			"person_id": 2, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -260,7 +260,7 @@
 		},
 		{
 			"manuscript_id": 4,
-			"person_id": 4, // must match w RICode of accepted man
+			"person_id": 4, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -271,7 +271,7 @@
 		},
 		{
 			"manuscript_id": 4,
-			"person_id": 5, // must match w RICode of accepted man
+			"person_id": 5, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -282,7 +282,7 @@
 		},
 		{
 			"manuscript_id": 5,
-			"person_id": 2, // must match w RICode of accepted man
+			"person_id": 2, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -293,7 +293,7 @@
 		},
 		{
 			"manuscript_id": 5,
-			"person_id": 4, // must match w RICode of accepted man
+			"person_id": 4, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -304,7 +304,7 @@
 		},
 		{
 			"manuscript_id": 5,
-			"person_id": 5, // must match w RICode of accepted man
+			"person_id": 5, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -315,7 +315,7 @@
 		},
 		{
 			"manuscript_id": 6,
-			"person_id": 2, // must match w RICode of accepted man
+			"person_id": 2, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -326,7 +326,7 @@
 		},
 		{
 			"manuscript_id": 6,
-			"person_id": 4, // must match w RICode of accepted man
+			"person_id": 4,
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -337,7 +337,7 @@
 		},
 		{
 			"manuscript_id": 6,
-			"person_id": 5, // must match w RICode of accepted man
+			"person_id": 5, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -348,7 +348,7 @@
 		},
 		{
 			"manuscript_id": 7,
-			"person_id": 2, // must match w RICode of accepted man
+			"person_id": 2, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -359,7 +359,7 @@
 		},
 		{
 			"manuscript_id": 7,
-			"person_id": 4, // must match w RICode of accepted man
+			"person_id": 4, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -370,7 +370,7 @@
 		},
 		{
 			"manuscript_id": 7,
-			"person_id": 5, // must match w RICode of accepted man
+			"person_id": 5, 
 			"date_assigned": "2016-07-14 08:14:49",
 			"appropriateness": 7,
 			"clarity": 7,
@@ -397,7 +397,5 @@
 			"position_in_issue":1
 		}
 	]
-
-
 
 }
