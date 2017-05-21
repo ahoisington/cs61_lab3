@@ -11,6 +11,13 @@ USAGE: mongo < <path to setup.js>
 // choose db
 use local
 
+// drop tables if they exist
+db.person.drop()
+db.manuscript.drop()
+db.feedback.drop()
+db.RICodes.drop()
+db.issue.drop()
+
 // insert person collection
 db.person.insert(
 	[
@@ -243,7 +250,7 @@ db.issue.insert(
 		"print_date": "2016-012-14",
 		"pub_period_num": 2,
 		"pub_year": 2018,
-		"person_id": 3
+		"editor_id": 3
 	}
 )
 
@@ -579,10 +586,22 @@ The following updates are necessary for part 3b. This is our "testing"
 to show that our database will support our frontend application. 
 */
 
-// need to be able to update a particular manuscript's man_status to "rejected" (but check to make sure it's the right editor)
+// need to be able to update a particular manuscript's man_status to "scheduled for publication", "rejected", "accepted", "in typesetting", or "under review" (but check to make sure it's the right editor)
 db.manuscript.update(
    { manuscript_id: 1, editor_id: 3 },
    { $set: { man_status: "rejected" } }
+)
+
+// need to be able to update a particular manuscript's number of pages (but check to make sure it's the right editor)
+db.manuscript.update(
+   { manuscript_id: 7, editor_id: 3 },
+   { $set: { 'acceptance_info.num_of_pages': 34 } }
+)
+
+// need to be able to update a particular issue's information (but check to make sure it's the right editor)
+db.issue.update(
+   { issue_id: 1, editor_id: 3 },
+   { $set: { print_date: "2016-05-08", pub_period_num: 3, pub_year: 2019 } }
 )
 
 /* 	
