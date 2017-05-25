@@ -124,8 +124,8 @@ public class frontend {
 								person_id = "1";
 							}
 
-		               		////////// INSERT AUTHOR INTO PERSON TABLE///////////
-		               		collection = db.getCollection("person"); 
+		               		////////// INSERT REVEIWER INTO PERSON TABLE///////////
+		               		DBCollection person = db.getCollection("person"); 
 						  	doc = new BasicDBObject("person_id", person_id)
 					            .append("fname", fname)
 					            .append("lname", lname)
@@ -134,7 +134,7 @@ public class frontend {
 					            .append("mailing_address",address)
 					            .append("affiliation",affiliation);
 
-					        collection.insert(doc);
+					        person.insert(doc);
 
 		               		
 
@@ -163,11 +163,12 @@ public class frontend {
 							}
 
 		               		// insert editor into person table
-							collection = db.getCollection("person"); 
+							DBCollection person = db.getCollection("person"); 
 						  	doc = new BasicDBObject("person_id", person_id)
 					            .append("fname", fname)
 					            .append("lname", lname)
 					            .append("person_job", person_job);
+					        person.insert(doc);
 
 		               		System.out.println("Editor #" + person_id + " has registered successfully. Please login with your new ID to continue.");
 
@@ -231,7 +232,7 @@ public class frontend {
 
 		               		// insert reviewer into person table
 							////////// INSERT REVIEWER INTO PERSON TABLE///////////
-							collection = db.getCollection("person");
+							DBCollection person = db.getCollection("person");
 							if (num_ricodes == 1){
 								doc = new BasicDBObject("person_id", person_id)
 					            .append("fname", fname)
@@ -260,7 +261,7 @@ public class frontend {
 					            .append("RICode2", ricode2)
 					            .append("RICode3", ricode3);
 							}			
-					        collection.insert(doc);
+					        person.insert(doc);
 		               		System.out.println("Reviewer #" + person_id + " has registered successfully. Please login with your new ID to continue.");
 							
 							
@@ -432,9 +433,9 @@ public class frontend {
             //    			res = stmt.executeQuery(query);
 
 						if (res.next()){
-							new_man_id = String.valueOf(Integer.parseInt(res.getString(1)) + 1);
+							new_manuscript_id = String.valueOf(Integer.parseInt(res.getString(1)) + 1);
 						} else {
-							new_man_id = "1";
+							new_manuscript_id = "1";
 						}
 
 						// get today's date
@@ -442,11 +443,19 @@ public class frontend {
 
 						////////////////////FOR ACACIA TO DO
 						// insert manuscript into manuscript
-						query = ("INSERT INTO `manuscript` (`manuscript_id`,`title`,`date_submitted`,`man_status`,`RICode`,`person_id`) " 
-								+ "VALUES (" + new_man_id + ",'" + title + "','" + currentTime + "','submitted'," + ricode + "," + editor_id + ");"
-								);
-						stmt = con.createStatement();
-	           			stmt.executeUpdate(query);
+						DBCollection manuscript = db.getCollection("manuscript");
+						doc = new BasicDBObject("manuscript_id", new_manuscript_id)
+					            .append("title", title)
+					            .append("date_submitted", currentTime)
+					            .append("man_status", "submitted")
+					            .append("RICode", ricode)
+					            .append("editor_id",editor_id);
+					    manuscript.insert(doc);
+					    BasicDBList authors = new BasicDBList();
+					    BasicDBObject author1 = new BasicDBObject("person_id",person_id).append("author_order_number",1);
+					    authors.add(author1);
+					    //need to add to manuscript next
+
 
 	           			// insert primary author information
 						query = ("INSERT INTO `man_to_author` (`manuscript_id`,`person_id`,`author_order_num`) VALUES (" + new_man_id + "," + person_id + ",1);");
@@ -658,16 +667,15 @@ public class frontend {
 	               		
 	               		}
 
-						// update manuscript to "in typesetting"
- 						query = ("UPDATE `manuscript` SET `man_status` = 'in typesetting' WHERE manuscript_id = " + manu_id + " AND person_id=" + person_id + ";");
- 						stmt = con.createStatement();
-            			stmt.executeUpdate(query);	
+						// // update manuscript to "in typesetting" //TO DO
+ 					// 	query = ("UPDATE `manuscript` SET `man_status` = 'in typesetting' WHERE manuscript_id = " + manu_id + " AND person_id=" + person_id + ";");
+ 					// 	stmt = con.createStatement();
+      //       			stmt.executeUpdate(query);	
 
-						// set number of pages for manuscript
- 						query = ("UPDATE `accepted_man` SET `num_pages`=" + pp + ";");
-
- 						stmt = con.createStatement();
-            			stmt.executeUpdate(query);
+						// // set number of pages for manuscript //TO DO
+ 					// 	query = ("UPDATE `accepted_man` SET `num_pages`=" + pp + ";");
+ 					// 	stmt = con.createStatement();
+      //       			stmt.executeUpdate(query);
 
             			System.out.println("Manuscript #" + manu_id + " is " + pp + " pages long.");
 
@@ -693,13 +701,10 @@ public class frontend {
 	               		
 	               		}
 
-	               		// check to see if manuscript has been typeset, if so, get number of pages
-	               		query = ("SELECT num_pages FROM accepted_man WHERE manuscript_id=" + manu_id + ";");
-
-	               		System.out.println(query);
-
-	               		stmt = con.createStatement();
-            			res = stmt.executeQuery(query);
+	               		// // check to see if manuscript has been typeset, if so, get number of pages //TO DO
+	               		// query = ("SELECT num_pages FROM accepted_man WHERE manuscript_id=" + manu_id + ";");
+	              //  		stmt = con.createStatement();
+            			// res = stmt.executeQuery(query);
 
             			if (res.next()) {
             				if (res.getString(1) == null) {
@@ -714,15 +719,14 @@ public class frontend {
 		        			System.exit(1);	
             			}
 
-            			// check to see how full the issue is?
-            			query = ("SELECT SUM(page_num), COUNT(manuscript_id) FROM issue_to_man WHERE issue_id=" + issue_id + ";");
-
-	               		stmt = con.createStatement();
-	        			res = stmt.executeQuery(query);
+            // 			// check to see how full the issue is? //TO DO
+            // 			query = ("SELECT SUM(page_num), COUNT(manuscript_id) FROM issue_to_man WHERE issue_id=" + issue_id + ";");
+	           //     		stmt = con.createStatement();
+	        			// res = stmt.executeQuery(query);
 
 	        			if (res.next()) {
 
-	        				// would the issue have more than 100 pages if this manuscript were added?
+	        				// would the issue have more than 100 pages if this manuscript were added?  TO DO
 	        				if ( (Integer.parseInt(num_pages) + Integer.parseInt(res.getString(1))) > 100 ) {
 	        					System.err.println("Issue #" + issue_id + " is too full. Cannot fit manuscript #" + manu_id + " in this issue.");
 	        					System.exit(1);	
@@ -738,17 +742,15 @@ public class frontend {
 
 	        			String pos_in_issue = String.valueOf(Integer.parseInt(num_mans_in_issue) + 1);
 
-						// insert manuscript information into issue_to_man
- 						query = ("INSERT INTO `issue_to_man` (`manuscript_id`,`issue_id`,`page_num`,`position_in_issue`) VALUES (" + manu_id + "," + issue_id + "," + num_pages + "," + pos_in_issue + ");");
+						// // insert manuscript information into issue_to_man TO DO
+ 					// 	query = ("INSERT INTO `issue_to_man` (`manuscript_id`,`issue_id`,`page_num`,`position_in_issue`) VALUES (" + manu_id + "," + issue_id + "," + num_pages + "," + pos_in_issue + ");");
+ 					// 	stmt = con.createStatement();
+      //       			stmt.executeUpdate(query);
 
- 						stmt = con.createStatement();
-            			stmt.executeUpdate(query);
-
-            			// set manuscript status to be "scheduled for publication"
- 						query = ("UPDATE manuscript SET `man_status`=`scheduled for publication` WHERE manuscript_id=" + manu_id + ");");
-
- 						stmt = con.createStatement();
-            			stmt.executeUpdate(query);
+       //      			// set manuscript status to be "scheduled for publication" TO DO
+ 						// query = ("UPDATE manuscript SET `man_status`=`scheduled for publication` WHERE manuscript_id=" + manu_id + ");");
+ 						// stmt = con.createStatement();
+       //      			stmt.executeUpdate(query);
 
             			System.out.println(query);
             			System.out.println("Manuscript #" + manu_id + " is at position " + pos_in_issue + " in issue #" + issue_id + ".");	
@@ -765,7 +767,6 @@ public class frontend {
 	               		String issue_id = request[1];
 	               		String pub_period_num = request[2];
 
-
 	               		// make sure issue is an integer
 	               		if ( !isInteger(issue_id) || !isInteger(pub_period_num) ) {
 
@@ -780,11 +781,10 @@ public class frontend {
             			// get this year
             			String currentYear = getYear();
 
-						// update manuscript information into issue_to_man
- 						query = ("UPDATE issue SET `print_date`=" + currentTime + ", `pub_period_num`=" + pub_period_num + ", `pub_year`=" + currentYear + " WHERE issue_id=" + issue_id + ");");
-
- 						stmt = con.createStatement();
-            			stmt.executeUpdate(query);
+						// // update manuscript information into issue_to_man TO DO
+ 					// 	query = ("UPDATE issue SET `print_date`=" + currentTime + ", `pub_period_num`=" + pub_period_num + ", `pub_year`=" + currentYear + " WHERE issue_id=" + issue_id + ");");
+ 					// 	stmt = con.createStatement();
+      //       			stmt.executeUpdate(query);
 
             			System.out.println("Issue #" + issue_id + " has been published.");
 
@@ -834,25 +834,23 @@ public class frontend {
        			    	// get today's date
        			    	String currentTime = getDate();
 
-			    	    // update feedback from this reviewer for manuscript
- 						query = ("UPDATE feedback SET appropriateness = " + appropriateness + ", clarity = " + 
- 							clarity + ", methodology = " + methodology + ", contribution_to_field = " + 
- 							contribution + ", recommendation = " + recommendation + ", date_completed = '" + 
- 							currentTime + "' WHERE manuscript_id = " + manuscript_id + " AND person_id=" + person_id + ";");
-
- 						stmt = con.createStatement();
-            			stmt.executeUpdate(query);		
+			    // 	    // update feedback from this reviewer for manuscript TO DO
+ 						// query = ("UPDATE feedback SET appropriateness = " + appropriateness + ", clarity = " + 
+ 						// 	clarity + ", methodology = " + methodology + ", contribution_to_field = " + 
+ 						// 	contribution + ", recommendation = " + recommendation + ", date_completed = '" + 
+ 						// 	currentTime + "' WHERE manuscript_id = " + manuscript_id + " AND person_id=" + person_id + ";");
+ 						// stmt = con.createStatement();
+       //      			stmt.executeUpdate(query);		
             			System.out.println("Feedback submitted.");    
 
        			    /* ------------- STATUS ------------- */
        			    // we expect: status
        			    } else if (request[0].equals("status") && mode.equals("reviewer")) {
 
-               			// retrieve reviewer's manuscript information
-						query = ("SELECT manuscript_id, title, man_status, date_submitted FROM ReviewerManuscripts WHERE reviewer_id=" + person_id + " ORDER BY manuscript_id ASC;");	
-
-						stmt = con.createStatement();
-	           			res = stmt.executeQuery(query);
+      //          			// retrieve reviewer's manuscript information TO DO
+						// query = ("SELECT manuscript_id, title, man_status, date_submitted FROM ReviewerManuscripts WHERE reviewer_id=" + person_id + " ORDER BY manuscript_id ASC;");	
+						// stmt = con.createStatement();
+	     //       			res = stmt.executeQuery(query);
 
 	           			System.out.println("");
 
