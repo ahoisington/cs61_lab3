@@ -16,13 +16,16 @@ public class frontend {
 
 	public static void main( String args[] ) {
 		String mode = "initial";
-		String person_id = "";
+		Integer person_id = null;
 	    String person_job = "";
 	    BasicDBObject doc = null;
 	    DBCollection person = null;
 	    DBCollection feedback = null;
 	    DBCollection manuscript = null;
 	    DBCollection issue = null;
+	    BasicDBObject query = null;
+	    DBCursor cursor = null;
+	    BasicDBObject fields = null; //tells mongodb what fields in doc to send over
 
 	    try{   
 		
@@ -33,20 +36,24 @@ public class frontend {
 		  	manuscript = db.getCollection("manuscript");
 
 
-		 //  	// BEGIN PLAY/TEST
-		 //  	 
-		 //  	doc = new BasicDBObject("person_id", 1)
-	  //           .append("fname", "Spongebob")
-	            // .append("lname", "Squarepants")
-	  //           .append("person_job", "author")
-	  //           .append("email","sb@mac.com")
-	  //           .append("mailing_address","Bikini Bottom")
-	  //           .append("affiliation","The Ocean");
+		  	// BEGIN PLAY/TEST
+		  	 
+		  	doc = new BasicDBObject("personID", 57)
+	            .append("fname", "Spongebob")
+	            .append("lname", "Squarepants")
+	            .append("person_job", "author")
+	            .append("email","sb@mac.com")
+	            .append("mailing_address","Bikini Bottom")
+	            .append("affiliation","The Ocean");
 
-	  //       collection.insert(doc);
+	        person.insert(doc);
 
-	  //       DBObject myDoc = collection.findOne();
-	 	// 	System.out.println(myDoc); 
+	        DBObject q = new BasicDBObject();
+       		q.put("person_id", 56);
+       		System.out.println("here2");
+	        DBObject myDoc = person.findOne(q);
+	        System.out.println("here3");
+	 		System.out.println(myDoc); 
 
 	 	// 	// END PLAY/TEST 
 
@@ -294,101 +301,99 @@ public class frontend {
        			    		System.exit(1);
        			    	}
 
-	               		person_id = request[1];	          
-
-	               		// make sure person_id is an integer
-	               		if (!isInteger(person_id)) {
+       			    	// make sure person_id is given as an integer
+	               		if (!isInteger(request[1])) {
 	               			System.err.println("Invalid ID.");
 							System.exit(1);
 	               		}
-
-	               		DBCollection collection = db.getCollection("person");
-
-	               		DBObject query = new BasicDBObject("person_id", person_id);
-
-	               		DBObject dbObject = collection.findOne();
+	               		person_id = Integer.parseInt(request[1]);	  
 	               		
-	               		System.out.println(dbObject);
 
-               			// retrieve information about this person
-	               		// Document person_info = person.find( { person_id: person_id } , { _id: 0, person_job: 1 } ).first();
+	               		//check that pID exists in person collection
+	               		query = new BasicDBObject("person_id", new BasicDBObject("$eq", person_id));
+	               		cursor = person.find(query);
+					    if(!cursor.hasNext()) {
+					    	System.err.println("Invalid ID.");
+	               			System.exit(1);
+					    } 
+					    DBObject result = cursor.next();
+					    Object pjob = result.get("person_job");
+					    person_job = pjob.toString();
+					    Object fname = result.get("fname");
+					    Object lname = result.get("lname");
+						    // greeting
+						System.out.println("\nWelcome to your " + person_job+ " page.\n");
+						System.out.println(fname.toString() +  " " + lname.toString());
 
-	               		// if (person_info != null) {
+	               		if (pjob.equals("author")){
 
-	               		// 	System.out.println(person_info.toJson());			
-	               		
-	               		// } else {
-
-	               		// 	System.err.println("Invalid ID.");
-	               		// 	System.exit(1);
-
-	               		// }
-
-					// 	if (res.next()){
-
-					// 		person_job = res.getString(4);
-
-					// 		// greeting
-					// 		System.out.println("\nWelcome to your " + person_job + " page.\n");
-					// 		System.out.println(res.getString(2) +  " " + res.getString(3));
+	               			mode = "author";
 
 
+	               			// retrieve author's manuscript information //TO DO
+// db.manuscript.find( { "authors": { person_id: <person_id>, author_order_num: 1 } } , {_id: 0, manuscript_id: 1, title: 1, man_status: 1, date_submitted: 1} ).sort({manuscript_id: 1}).pretty()
+	               			// //NEED TO CHECK IF THIS IS CORRECT
+	               			// query = new BasicDBObject("authors", new BasicDBObject("$eq", person_id).append("author_order_num", 1));
+	               			// cursor = manuscript.find(query);
+	               			// result = cursor.next();
+	               			// System.out.println(result);
 
+	               			//outputs all manuscripts where author is an author vs only manuscript where author is primary author
+	               			query = new BasicDBObject("authors.author_order_num", new BasicDBObject("$eq", 1)).append("authors.person_id", person_id);
+							fields=new BasicDBObject("manuscript_id",1).append("title", 1).append("man_status", 1).append("date_submitted", 1);
+							cursor = manuscript.find(query, fields);
 
-	    //            		if (person_job.equals("author")){
+							// DBObject q_part1 = new BasicDBObject("authors.person_id", new BasicDBObject("$eq", person_id));
+							// DBObject q_part2 = new BasicDBObject("authors.author_order_num", new BasicDBObject("$eq", 1));
+							// BasicDBList andQuery = new BasicDBList();
+							// andQuery.add(q_part1);
+							// andQuery.add(q_part2);
+							// query = new BasicDBObject("$and", andQuery);
+							cursor = manuscript.find(query);
+							System.out.println(query);
 
-	    //            			mode = "author";
+							while (cursor.hasNext()) {
+								DBObject manu = cursor.next();
+								System.out.println("manuscript: " + manu.get("manuscript_id") + " "+ manu.get("title") + " "+ manu.get("man_status")+ " "+ manu.get("date_submitted") );
+							}		
 
-	    //            			// retrieve author specific information //TO DO
-					// 		// query = ("SELECT * FROM author WHERE person_id=" + person_id + ";");		           			
-					// 		// stmt = con.createStatement();
-		   //   //       			res = stmt.executeQuery(query);
+		           			// printStatus(res);	
+		           			//need to access author info and their manuscript info and print dat shit out //TO DO
 
-		   //         			if (res.next()){
-		   //         				System.out.println(res.getString(3) + "\n"); // mailing address
-		   //         			}
+	               		} else if (person_job.equals("reviewer")){
 
-	    //            			// retrieve author's manuscript information //TO DO
-					// 		// query = ("SELECT manuscript_id, title, man_status, date_submitted FROM LeadAuthorManuscripts WHERE person_id=" + person_id + " ORDER BY manuscript_id ASC;");	
-					// 		// stmt = con.createStatement();
-		   //   //       			res = stmt.executeQuery(query);
-
-		   //         			printStatus(res);	
-		   //         			//need to access author info and their manuscript info and print dat shit out //TO DO
-
-	    //            		} else if (person_job.equals("reviewer")){
-
-	    //            			mode = "reviewer";
+	               			mode = "reviewer";
 
 	    //            			//TO DO
-	    //            			// retrieve editor's manuscript information (should these be ALL manuscripts or only the ones overseen by this editor???)
+	    //            			// retrieve reviewer's manuscript information (should these be ALL manuscripts or only the ones overseen by this editor???)
 					// 		// query = ("SELECT manuscript_id, title, man_status, date_submitted FROM ReviewerManuscripts WHERE reviewer_id=" + person_id + " ORDER BY man_status DESC, manuscript_id ASC;");		           			
 					// 		// stmt = con.createStatement();
 		   //   //       			res = stmt.executeQuery(query);
+
 
 		   //         			System.out.println("");
 
 		   //         			printStatus(res);
 
-	    //            		} else if (person_job.equals("editor")){
+	               		} else if (person_job.equals("editor")){
 
-	    //            			mode = "editor";
+	               			mode = "editor";
 
-	    //            			//TO DO
-	    //            			// retrieve editor's manuscript information (should these be ALL manuscripts or only the ones overseen by this editor???)
-					// 		// query = ("SELECT manuscript_id, title, man_status, date_submitted FROM LeadAuthorManuscripts WHERE editor_id=" + person_id + " ORDER BY man_status DESC, manuscript_id ASC;");		           			
-					// 		// stmt = con.createStatement();
-		   //   //       			res = stmt.executeQuery(query);
+	    //            			
+	               			query = new BasicDBObject("editor_id", person_id);
+							fields=new BasicDBObject("manuscript_id",1).append("title", 1).append("man_status", 1).append("date_submitted", 1);
+							cursor = manuscript.find(query, fields);
+							while (cursor.hasNext()) {
+								DBObject manu = cursor.next();
+								System.out.println("manuscript: " + manu.get("manuscript_id") + " "+ manu.get("title") + " "+ manu.get("man_status")+ " "+ manu.get("date_submitted") );
+							}	
 
-		   //         			System.out.println("");
 
-					// 		printStatus(res);
-
-	    //            		} else {
-	    //            			// this should never happen!
-	    //            			System.err.println("Input error: Make sure your request to login follows the correct format. Read documentation or input -h or --help for guidance.");
-	    //            			System.exit(1);
-	    //            		}
+	               		} else {
+	               			// this should never happen!
+	               			System.err.println("Input error: Make sure your request to login follows the correct format. Read documentation or input -h or --help for guidance.");
+	               			System.exit(1);
+	               		}
 	            	
 
 	               	/* ----------------------------------------------------- RESIGN ----------------------------------------------------- */
@@ -430,71 +435,134 @@ public class frontend {
 
            		    /* --------------------------------------- AUTHOR OPTIONS --------------------------------------- */
            		    /* ------------- SUBMIT ------------- */
-       			    // we expect: submit <title> <affiliationcode> <ricode> <filename> <editor_id> <author2_id> <author3_id> <author4_id>
+       			    // we expect: submit <title> <affiliation> <ricode> <filename> <editor_id> <author2_id> <author3_id> <author4_id>
        			    } else if (request[0].equals("submit") && mode.equals("author")) {
        			    	System.out.println("AUTHOR SUBMIT");
-     //   			    	if (num_args < 6 || num_args > 9) {
-     //   			    		System.err.println("Incorrect number of arguments.");
-     //   			    		System.exit(1);
-     //   			    	}
+       			    	if (num_args < 6 || num_args > 9) {
+       			    		System.err.println("Incorrect number of arguments.");
+       			    		System.exit(1);
+       			    	}
 
-     //   			    	String title = request[1];
-     //   			    	String affiliation = request[2];
-     //   			    	String ricode = request[3];
-     //   			    	String filename = request[4]; 
-     //   			    	String editor_id = request[5];
+       			    	String title = request[1];
+       			    	String affiliation = request[2];
+       			    	String ricode = request[3];
+       			    	String filename = request[4]; 
+       			    	String editor_id = request[5];
+       			    	String new_man_id = "";
 
-     //   			    	String new_man_id = "";
 
-	    //            		// make sure manu_id and reviewer_id are integers
-	    //            		if ( !isInteger(ricode) || !isInteger(editor_id) ) {
-	    //            			System.err.println("RICode and the editor ID must be integers.");
-					// 		System.exit(1);	               		
-	    //            		}
+	               		// make sure manu_id and reviewer_id are integers
+	               		if ( !isInteger(ricode) || !isInteger(editor_id) ) {
+	               			System.err.println("RICode and the editor ID must be integers.");
+							System.exit(1);	               		
+	               		}
 
 
    		// 	    		// // figure out next manuscript_id //TO DO
      //        //    			query = "SELECT MAX(manuscript_id) FROM manuscript;";
      //        //    			stmt = con.createStatement();
      //        //    			res = stmt.executeQuery(query);
-
+	               		Integer new_manuscript_id = 52;
 					// 	if (res.next()){
 					// 		new_manuscript_id = String.valueOf(Integer.parseInt(res.getString(1)) + 1);
 					// 	} else {
 					// 		new_manuscript_id = "1";
 					// 	}
 
-					// 	// get today's date
-					// 	String currentTime = getDate();
+						// get today's date
+						String currentTime = getDate();
 
-					// 	////////////////////FOR ACACIA TO DO
-					// 	// insert manuscript into manuscript
-					// 	DBCollection manuscript = db.getCollection("manuscript");
-					// 	doc = new BasicDBObject("manuscript_id", new_manuscript_id)
-					//             .append("title", title)
-					//             .append("date_submitted", currentTime)
-					//             .append("man_status", "submitted")
-					//             .append("RICode", ricode)
-					//             .append("editor_id",editor_id);
-					//     manuscript.insert(doc);
-					//     BasicDBList authors = new BasicDBList();
-					//     BasicDBObject author1 = new BasicDBObject("person_id",person_id).append("author_order_number",1);
-					//     authors.add(author1);
-					//     //need to add to manuscript next
+						if (num_args == 6){ //only one author
+							//insert manuscript into manuscript
+							manuscript = db.getCollection("manuscript");
+							doc = new BasicDBObject("manuscript_id", new_manuscript_id)
+						            .append("title", title)
+						            .append("date_submitted", currentTime)
+						            .append("man_status", "submitted")
+						            .append("RICode", ricode)
+						            .append("editor_id",editor_id);
+						    
+						    //insert authors
+						    BasicDBList authors = new BasicDBList(); //create list of authors
+						    BasicDBObject author1 = new BasicDBObject("person_id",person_id).append("author_order_number",1);
+						    
+						    authors.add(author1); //add to list of authors
+							
+							doc.put("authors", authors);
+						    manuscript.insert(doc); //insert man
 
+						} else if (num_args == 7){ //two authors
+							manuscript = db.getCollection("manuscript");
+							doc = new BasicDBObject("manuscript_id", new_manuscript_id)
+						            .append("title", title)
+						            .append("date_submitted", currentTime)
+						            .append("man_status", "submitted")
+						            .append("RICode", ricode)
+						            .append("editor_id",editor_id);
 
-	    //        			// insert primary author information
-					// 	query = ("INSERT INTO `man_to_author` (`manuscript_id`,`person_id`,`author_order_num`) VALUES (" + new_man_id + "," + person_id + ",1);");
-					// 	stmt = con.createStatement();
-	    //        			stmt.executeUpdate(query);
+						    Integer author2_id = Integer.parseInt(request[6]);
 
-	    //        			// insert secondary author information
-					// 	for (int i=6; i<num_args; i++) {
-					// 		query = "INSERT INTO `man_to_author` (`manuscript_id`,`person_id`,`author_order_num`) VALUES (" + new_man_id + "," + request[i] + "," + String.valueOf(i-4) + ");";
-					// 		stmt = con.createStatement();
-	    //        				stmt.executeUpdate(query);
-					// 	}   
-					// 	///////////////////// 			    
+						    BasicDBList authors = new BasicDBList(); //create list of authors
+						    BasicDBObject author1 = new BasicDBObject("person_id",person_id).append("author_order_number",1);
+						 	BasicDBObject author2 = new BasicDBObject("person_id",author2_id).append("author_order_number",2);
+						 	
+						 	authors.add(author1);
+						 	authors.add(author2);
+
+							doc.put("authors", authors);
+						    manuscript.insert(doc); //insert man
+						} else if (num_args == 8){ //three authors
+							manuscript = db.getCollection("manuscript");
+							doc = new BasicDBObject("manuscript_id", new_manuscript_id)
+						            .append("title", title)
+						            .append("date_submitted", currentTime)
+						            .append("man_status", "submitted")
+						            .append("RICode", ricode)
+						            .append("editor_id",editor_id);
+
+ 							Integer author2_id = Integer.parseInt(request[6]);
+ 							Integer author3_id = Integer.parseInt(request[7]);
+
+						    BasicDBList authors = new BasicDBList(); //create list of authors
+						    BasicDBObject author1 = new BasicDBObject("person_id",person_id).append("author_order_number",1);
+						 	BasicDBObject author2 = new BasicDBObject("person_id",author2_id).append("author_order_number",2);
+						 	BasicDBObject author3 = new BasicDBObject("person_id",author3_id).append("author_order_number",3);
+						 	
+						 	authors.add(author1);
+						 	authors.add(author2);
+						 	authors.add(author3);
+
+							doc.put("authors", authors);
+						    manuscript.insert(doc); //insert man
+
+						} else if (num_args == 9){ //four authors
+							manuscript = db.getCollection("manuscript");
+							doc = new BasicDBObject("manuscript_id", new_manuscript_id)
+						            .append("title", title)
+						            .append("date_submitted", currentTime)
+						            .append("man_status", "submitted")
+						            .append("RICode", ricode)
+						            .append("editor_id",editor_id);
+
+ 							Integer author2_id = Integer.parseInt(request[6]);
+ 							Integer author3_id = Integer.parseInt(request[7]);
+ 							Integer author4_id = Integer.parseInt(request[8]);
+
+						    BasicDBList authors = new BasicDBList(); //create list of authors
+						    BasicDBObject author1 = new BasicDBObject("person_id",person_id).append("author_order_number",1);
+						 	BasicDBObject author2 = new BasicDBObject("person_id",author2_id).append("author_order_number",2);
+						 	BasicDBObject author3 = new BasicDBObject("person_id",author3_id).append("author_order_number",3);
+						 	BasicDBObject author4 = new BasicDBObject("person_id",author4_id).append("author_order_number",4);
+
+						 	authors.add(author1);
+						 	authors.add(author2);
+						 	authors.add(author3);
+						 	authors.add(author4);
+
+							doc.put("authors", authors);
+						    manuscript.insert(doc); //insert man
+						}
+							    
 
 					/* ------------- STATUS ------------- */
        			    // we expect: status
@@ -555,19 +623,20 @@ public class frontend {
        			    // we expect: status
        			    } else if (request[0].equals("status") && mode.equals("editor")) {
        			    	System.out.println("EDITOR STATUS");
-     //   			    	if (num_args != 1) {
-     //   			    		System.err.println("Incorrect number of arguments.");
-     //   			    		System.exit(1);
-     //   			    	}
+       			    	if (num_args != 1) {
+       			    		System.err.println("Incorrect number of arguments.");
+       			    		System.exit(1);
+       			    	}
 
-     //  //          			// retrieve editor's manuscript information  //TO DO
-					// 	// query = ("SELECT manuscript_id, title, man_status, date_submitted FROM LeadAuthorManuscripts WHERE editor_id=" + person_id + " ORDER BY man_status DESC, manuscript_id ASC;");		           			
-					// 	// stmt = con.createStatement();
-	    //  //       			res = stmt.executeQuery(query);
+       			    	//ask for all manuscripts for this editor
+       			    	query = new BasicDBObject("editor_id", person_id);
+						fields=new BasicDBObject("manuscript_id",1).append("title", 1).append("man_status", 1).append("date_submitted", 1);
+						cursor = manuscript.find(query, fields);
+						while (cursor.hasNext()) {
+							DBObject manu = cursor.next();
+							System.out.println("manuscript: " + manu.get("manuscript_id") + " "+ manu.get("title") + " "+ manu.get("man_status")+ " "+ manu.get("date_submitted") );
+						}
 
-	    //        			System.out.println("");
-
-					// 	printStatus(res);
 
        			    /* ------------- ASSIGN ------------- */
        			    // we expect: assign <manu_id> <reviewer_id>
@@ -603,7 +672,7 @@ public class frontend {
      //   			    	// get today's date
      //   			    	String currentTime = getDate();
 
-			  //   	    // assign reviewer to manuscript //ACACIA TO DO
+			  //   	    // assign reviewer to manuscript 
  				// 		// query = ("INSERT INTO `feedback` (`manuscript_id`,`person_id`,`date_assigned`) VALUES (" + manu_id + "," + reviewer_id + ",'" + currentTime + "');");
  				// 		// stmt = con.createStatement();
      //   //      			stmt.executeUpdate(query);	
@@ -958,6 +1027,14 @@ public class frontend {
 	    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy");
     	return sdf.format(new java.util.Date());
 	}    
+
+
+	public static DBObject findDocumentById(DBCollection collection, String id) {
+	    BasicDBObject query = new BasicDBObject();
+	    query.put("person_id", id);
+	    DBObject dbObj = collection.findOne(query);
+	    return dbObj;
+	}
 
 
 
