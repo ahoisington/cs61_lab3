@@ -1,12 +1,12 @@
-/*
-AUTHORS: Elisabeth Pillsbury & Acacia Hoisington
-DATE: 5/20/17
-ASSIGNMENT: LAB3A | COSC61
 
-DESCRIPTION: a .js script to create and populate five collections and 
-run a few sample queries
-USAGE: mongo < <path to setup.js>
-*/
+// AUTHORS: Elisabeth Pillsbury & Acacia Hoisington
+// DATE: 5/20/17
+// ASSIGNMENT: LAB3A | COSC61
+
+// DESCRIPTION: a .js script to create and populate five collections and 
+// run a few sample queries
+// USAGE: mongo < <path to setup.js>
+
 
 // choose db
 use local
@@ -554,61 +554,3 @@ db.RICodes.insert(
 		{ "_id": 124, "RIString": "Systems engineering"}
 	]
 )
-
-/* 	
-The following queries are necessary for part 3b. This is our "testing" 
-to show that our database will support our frontend application. 
-*/
-
-// Select fname, lname, person_job, email, mailing_address, and affiliation associated with a particular PERSON
-db.person.find( { person_id: 3 } , { _id:0, fname:1, lname:1, person_job:1, email:1, mailing_address:1, affiliation:1 } ).pretty()
-
-// Select all manuscript_id‘s, title‘s, man_status‘s, and date_submitted‘s associated with a particular AUTHOR
-db.manuscript.find( { "authors": { person_id: 6, author_order_num: 1 } } , {_id: 0, manuscript_id: 1, title: 1, man_status: 1, date_submitted: 1} ).pretty()
-
-// Select all manuscript_id‘s, title‘s, man_status‘s, and date_submitted‘s associated with a particular REVIEWER
-db.manuscript.find( { "reviewers": 2 } , {_id: 0, manuscript_id: 1, title: 1, man_status: 1, date_submitted: 1} ).pretty()
-
-// Select all manuscript_id‘s, title‘s, man_status‘s, and date_submitted‘s associated with a particular EDITOR
-db.manuscript.find( { editor_id: 3 } , {_id: 0, manuscript_id: 1, title: 1, man_status: 1, date_submitted: 1} ).pretty()
-
-// Select all RICodes for a particular REVIEWER
-db.person.find( { person_id: 2 } , { _id: 0, RICode1: 1, RICode2: 1, RICode3: 1 } ).pretty()
-
-// Select RICode for a particular manuscript
-db.manuscript.find( { manuscript_id: 2 } , { _id: 0, RICode: 1 } ).pretty()
-
-// Select SUM of num_of_pages’s for all manuscripts associated with a particular issue
-db.manuscript.aggregate( { $match: { 'issue_info.issue_id': 1 } }, { $group: { _id: '', total: { $sum: '$acceptance_info.num_of_pages' } } }, { $project: { _id: 0, total_pages_in_issue: '$total' } } )
-
-/* 	
-The following updates are necessary for part 3b. This is our "testing" 
-to show that our database will support our frontend application. 
-*/
-
-// need to be able to update a particular manuscript's man_status to "scheduled for publication", "rejected", "accepted", "in typesetting", or "under review" (but check to make sure it's the right editor)
-db.manuscript.update(
-   { manuscript_id: 1, editor_id: 3 },
-   { $set: { man_status: "rejected" } }
-)
-
-// need to be able to update a particular manuscript's number of pages (but check to make sure it's the right editor)
-db.manuscript.update(
-   { manuscript_id: 7, editor_id: 3 },
-   { $set: { 'acceptance_info.num_of_pages': 34 } }
-)
-
-// need to be able to update a particular issue's information (but check to make sure it's the right editor)
-db.issue.update(
-   { issue_id: 1, editor_id: 3 },
-   { $set: { print_date: "2016-05-08", pub_period_num: 3, pub_year: 2019 } }
-)
-
-/* 	
-The following inserts are necessary for part 3b. This is our "testing" 
-to show that our database will support our frontend application. 
-*/
-
-
-
-
